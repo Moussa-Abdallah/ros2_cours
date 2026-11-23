@@ -14,8 +14,6 @@
 
 </div>
 
----
-
 ## Sommaire
 
 1. [À propos](#-à-propos)
@@ -31,7 +29,6 @@
 11. [Exercices proposés](#-exercices-proposés)
 12. [Auteur et licence](#-auteur-et-licence)
 
----
 
 ## À propos
 
@@ -45,8 +42,6 @@ progressif : chaque package correspond à une étape de l'apprentissage.
 | Avancé & simulation | `ros_description` | URDF/Xacro, RViz2, Gazebo, `ros_gz`, `ros2_control`, robot différentiel |
 
 > Les exemples de `turtlesim` (nœuds, topics, outils CLI) sont vus en cours, en amont de ce workspace.
-
----
 
 ## Contenu du dépôt
 
@@ -83,8 +78,6 @@ ros2_tutorial_ws/
         └── CMakeLists.txt
 ```
 
----
-
 ## Prérequis
 
 | Outil | Version |
@@ -111,8 +104,6 @@ sudo apt install -y \
   ros-jazzy-teleop-twist-keyboard \
   python3-colcon-common-extensions
 ```
-
----
 
 ## Installation et compilation
 
@@ -143,8 +134,6 @@ Compiler un seul package :
 colcon build --symlink-install --packages-select my_py_pkg
 ```
 
----
-
 ## Module 1 — Premiers nœuds Python
 
 Le package `my_py_pkg` expose quatre exécutables, déclarés dans `setup.py` :
@@ -162,8 +151,6 @@ ros2 run my_py_pkg second_node
 ```
 
 **Notions abordées :** `rclpy.init()`, `create_node()`, `get_logger()`, `shutdown()`, structure d'un package `ament_python`, `entry_points`.
-
----
 
 ## Module 2 — Publisher / Subscriber et launch file
 
@@ -201,8 +188,6 @@ rqt_graph
 ```
 
 **Notions abordées :** programmation orientée objet avec `Node`, `create_publisher`, `create_subscription`, `create_timer`, callbacks, `LaunchDescription`, séparation *code* / *bringup*.
-
----
 
 ## Module 3 — Décrire un robot (URDF / Xacro) et le visualiser
 
@@ -249,8 +234,6 @@ ros2 run tf2_tools view_frames
 ```
 
 **Notions abordées :** `link`, `joint`, `inertial`, `visual` / `collision`, Xacro, `robot_state_publisher`, TF, RViz2.
-
----
 
 ## Module 4 — Simulation Gazebo et ros2_control
 
@@ -322,8 +305,6 @@ ros2 topic echo /joint_states
 
 **Notions abordées :** Gazebo, `ros_gz_sim`, `ros_gz_bridge`, `ros2_control`, `joint_state_broadcaster`, `diff_drive_controller`, odométrie, gestion de l'ordre de démarrage.
 
----
-
 ## ⌨Commandes utiles
 
 | Objectif | Commande |
@@ -339,8 +320,6 @@ ros2 topic echo /joint_states
 | Graphe des nœuds | `rqt_graph` |
 | Arbre des TF | `ros2 run tf2_tools view_frames` |
 
----
-
 ## Dépannage
 
 | Problème | Piste de solution |
@@ -354,8 +333,6 @@ ros2 topic echo /joint_states
 | Gazebo ne démarre pas ou reste noir | Mettre à jour les pilotes graphiques, tester avec `LIBGL_ALWAYS_SOFTWARE=1` |
 | Les changements Python ne sont pas pris en compte | Compiler avec `--symlink-install` puis relancer le nœud |
 
----
-
 ## Exercices proposés
 
 1. **Hello ROS** — Modifier `second_node.py` pour afficher un message toutes les secondes avec un timer.
@@ -366,13 +343,3 @@ ros2 topic echo /joint_states
 6. **Robot** — Changer la couleur du châssis et la taille des roues dans le Xacro, puis mettre à jour `wheel_radius` dans `controllers.yaml`.
 7. **Capteur** — Ajouter un lidar ou une caméra au robot et les relier à ROS 2 avec `ros_gz_bridge`.
 8. **Monde** — Créer un monde Gazebo dans `world/` et le charger depuis `spawn.launch.py`.
-
----
-
-## Auteur et licence
-
-Formation conçue et animée par **XECORAX** — plateforme francophone d'apprentissage des systèmes embarqués et de la robotique.
-
-Les fichiers `package.xml` contiennent encore `License declaration: TODO`. Avant publication, choisissez une licence
-(par exemple MIT ou Apache-2.0), ajoutez un fichier `LICENSE` à la racine et mettez à jour les balises `<license>`.
-
