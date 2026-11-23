@@ -1,0 +1,22 @@
+# ROS2 / colcon
+build/
+install/
+log/
+
+# VS Code
+.vscode/
+*.vc.db
+*.vc.db-shm
+*.vc.db-wal
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# Divers
+*.swp
+.DS_Store

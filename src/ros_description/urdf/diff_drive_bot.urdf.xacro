@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<robot name="diff_drive_bot">
+
+  <!-- MATÉRIAUX -->
+  <material name="grey">  <color rgba="0.6 0.6 0.6 1"/></material>
+  <material name="black"> <color rgba="0.1 0.1 0.1 1"/></material>
+  <material name="red">   <color rgba="0.8 0.1 0.1 1"/></material>
+
+  <!--BASE FOOTPRINT (virtuel)  -->
+  <link name="base_footprint"/>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child  link="base_link"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <!--  CHÂSSIS  -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.30 0.25 0.08"/></geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.30 0.25 0.08"/></geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="0.011483" ixy="0" ixz="0"
+               iyy="0.016067" iyz="0"
+               izz="0.025417"/>
+    </inertial>
+  </link>
+
+  <!--  ROUE GAUCHE  -->
+  <link name="left_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.05" length="0.03"/></geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.05" length="0.03"/></geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.3"/>
+      <inertia ixx="0.00021"  ixy="0" ixz="0"
+               iyy="0.000375" iyz="0"
+               izz="0.00021"/>
+    </inertial>
+  </link>
+
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child  link="left_wheel"/>
+    <origin xyz="0 0.14 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10" velocity="20"/>
+  </joint>
+
+  <!--  ROUE DROITE  -->
+  <link name="right_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.05" length="0.03"/></geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.05" length="0.03"/></geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.3"/>
+      <inertia ixx="0.00021"  ixy="0" ixz="0"
+               iyy="0.000375" iyz="0"
+               izz="0.00021"/>
+    </inertial>
+  </link>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child  link="right_wheel"/>
+    <origin xyz="0 -0.14 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10" velocity="20"/>
+  </joint>
+
+  <!--  ROUE FOLLE (caster)  -->
+  <link name="caster_wheel">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><sphere radius="0.02"/></geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><sphere radius="0.02"/></geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.000016" ixy="0" ixz="0"
+               iyy="0.000016" iyz="0"
+               izz="0.000016"/>
+    </inertial>
+  </link>
+
+  <joint name="caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="caster_wheel"/>
+    <origin xyz="0.10 0 -0.03" rpy="0 0 0"/>
+  </joint>
+
+  <!--  GAZEBO (optionnel, utile pour simuler)  -->
+  <!-- La roue folle doit glisser : friction nulle -->
+  <gazebo reference="caster_wheel">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+
+
+
+  <!-- ROS 2 CONTROL : interface hardware pour Gazebo -->
+  <ros2_control name="DiffDriveBotSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+
+    <joint name="left_wheel_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="right_wheel_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <!-- Plugin Gazebo : charge le controller_manager  -->
+  <!-- et injecte les contrôleurs depuis le YAML     -->
+  <gazebo>
+    <plugin filename="gz_ros2_control-system"
+            name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find ros_description)/config/controllers.yaml</parameters>
+      <ros>
+        <namespace>/</namespace>
+      </ros>
+    </plugin>
+  </gazebo>
+
+</robot>
